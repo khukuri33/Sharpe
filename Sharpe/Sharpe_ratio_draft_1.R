@@ -1,7 +1,7 @@
 
 library(BatchGetSymbols)
 
-# Importing data from Yahoo finance, I am only doing 3 stocks right now, but once I have a good structure
+
 # I will feed the program all the 500 stocks from sp500 to get the highest possible sharpe ratio everyday.
 # only 3 datas for now
 first.date <- Sys.Date()-365
