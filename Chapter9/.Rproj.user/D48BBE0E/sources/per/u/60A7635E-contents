@@ -1,0 +1,48 @@
+x <- c(2,3,4)
+y <- c("a","b")
+c <- c("u","v")
+crossprod(x,y)
+install.packages("pracma")
+library(pracma)
+A <- c(2,1,1)
+B <- c(1,2,7)
+dot(A,B)
+sum(A*B)
+A%*%B
+D = matrix(c(6,2,1,2,5,1),2,3)
+G = matrix(c(1,0,0,2,1,2),2,3)
+D
+D+G
+m1 = matrix(1:24,3,8)
+m2 = matrix(1,8,2)
+m1%*%m2
+m4%*%m3
+m3 = matrix(1:4,2,2) 
+m4 = matrix(4:7,2,2)
+dot(D,G)
+dot(t(D)[3,],G[,3])
+A
+B
+A <- matrix(1:9, nrow = 3)
+B <- matrix(1:3, nrow = 1)
+t(A)%*%t(B) == t(B%*%A)
+A*B
+B%*%A
+red <- c(c(1:2),2,3)
+red
+is(myMultiVV(red))
+
+myMultiVV <- function(vector){
+  c <- NULL
+  d <- NULL
+  
+  for (i in 1:3){
+    for (j in vector){
+      c <- append(c, j)
+    }
+   
+    d <- append(d, c)
+    c <- NULL
+  }
+  return(d)
+}

@@ -1,0 +1,32 @@
+{
+    "id": "0EC4A848",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1608027067477.0,
+    "source_on_save": false,
+    "relative_order": 8,
+    "properties": {
+        "expression": "exp_return",
+        "caption": "exp_return",
+        "totalObservations": "188",
+        "displayedObservations": "188",
+        "variables": "499",
+        "cacheKey": "51E723A7",
+        "object": "exp_return",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=exp_return&cache_key=51E723A7&max_cols=50",
+        "preview": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 3180141919958494821,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1608027067477,
+    "read_only": false,
+    "read_only_alternatives": []
+}

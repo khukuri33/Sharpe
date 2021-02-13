@@ -1,0 +1,511 @@
+mean(mtcars$mpg)
+sigmoid <- function(z) {return(1/(1+exp(-z)))}
+x=0.2
+w1=0.3
+w2=0.4
+y=0.5
+#Calculate yhat.
+z2=x*w1
+a2=sigmoid(z2)
+z3=a2*w2
+yhat=sigmoid(z3)
+yhat
+
+J=0.5*(y-yhat)^2
+J
+
+jCostScalar=function(xValue=x,w1Value=w1,w2Value=w2,yValue=y){
+  #sample call: jCostScalar(x,w1,w2,y)
+  z2=xValue*w1Value
+  a2=sigmoid(z2)
+  z3=a2*w2Value
+  yhat=sigmoid(z3)
+  J=0.5*(yValue-yhat)^2
+  return(J)
+}
+
+jCostScalar(x,w1,w2,y)
+
+x1=0.2
+x2=0.15
+X=c(x1,x2) 
+
+w11=0.3
+w12=0.25
+W1=c(w11,w12)
+
+sum(X*W1)
+
+X=matrix(X,1,2)
+W1=matrix(W1,2,1)
+
+w2=0.4
+y=0.5
+
+inputLayerSize=2
+hiddenLayerSize=1 #We won’t use this yet.
+outputLayerSize=1 #We won’t use this yet.
+
+X=matrix(X,1,inputLayerSize)
+W1=matrix(W1, inputLayerSize,1)
+
+z2=X%*%W1
+
+a2=sigmoid(z2)
+z3=a2*w2
+yhat=sigmoid(z3)
+J=0.5*(y-yhat)^2
+J
+
+# writing a function for J
+
+jCost2Inputs=function(xValue=X,w1Value=W1,w2Value=w2,yValue=y){
+  #jCost2Inputs(X,W1,w2,y)
+  z2=xValue%%w1Value
+  a2=sigmoid(z2)
+  z3=a2*w2Value
+  yhat=sigmoid(z3)
+  J=0.5*(yValue-yhat)^2
+  return(J)
+}
+jCost2Inputs()
+
+inputLayerSize=2
+hiddenLayerSize=3
+outputLayerSize=1 #We won’t use this yet.
+
+set.seed(3)
+W1<<-matrix(runif(inputLayerSize*hiddenLayerSize,-1,1),inputLayerSize,hiddenLayerSize)
+x1=0.2
+x2=0.15
+X=c(x1,x2)
+X=matrix(X,1,2)
+
+Z2=X%*%W1
+Z2
+
+#runif generates random numbers between the given range (howmany #, starting range, ending range)
+
+sigmoid <- function(z) {
+  return(1/(1+exp(-z)))
+}
+A2=sigmoid(Z2)
+A2
+
+W2<<-matrix(runif(hiddenLayerSize*outputLayerSize,-1,1),hiddenLayerSize,outputLayerSize)
+Z3=A2%*%W2
+Z3
+
+yhat=sigmoid(Z3)
+yhat
+y = 0.5
+J=0.5*(y-yhat)^2
+J
+
+sigmoidPrime<-function(z){
+    return(exp(-z)/(1+exp(-z))^2)}
+
+x=0.2
+w1=0.3
+w2=0.4
+y=0.5
+
+z2=x*w1
+a2=sigmoid(z2)
+z3=a2*w2
+yhat=sigmoid(z3)
+yhat
+
+J=0.5*(y-yhat)^2
+J
+
+jCostScalar=function(xValue=x,w1Value=w1,w2Value=w2,yValue=y){
+  #Sample call: jCostScalar(x,w1,w2,y)
+  z2=xValue*w1Value
+  a2=sigmoid(z2)
+  z3=a2*w2Value
+  yhat=sigmoid(z3)
+  J=0.5*(yValue-yhat)^2
+  return(J)
+}
+
+jCostScalar(x,w1,w2,y)
+dJ_dw2= (y-yhat)*(-sigmoidPrime(z3))*(a2)
+dJ_dw2
+delta3=(y-yhat)*(-sigmoidPrime(z3))
+delta3
+
+dJ_dw2=delta3*a2
+dJ_dw2
+
+dJ_dw1 = delta3 * w2 * sigmoidPrime(z2)*x
+dJ_dw1
+
+delta2=delta3*w2*sigmoidPrime(z2)
+delta2
+
+dJ_dw1=delta2*x
+dJ_dw1
+
+updateWeights<-function(xValue="x",w1Value="w1",w2Value="w2",yValue= "y",r=2){
+  #weightsList=updateWeights(.5,weights[1],weights[2], .6,.2)
+  z2=xValue*w1Value
+  a2=sigmoid(z2)
+  z3=a2*w2Value
+  yhat=sigmoid(z3)
+  
+  #Calculate deltas and derivatives
+  delta3=(yValue-yhat)*(-sigmoidPrime(z3))
+  dJ_dw2=delta3*a2
+  delta2=delta3*w2Value*sigmoidPrime(z2)
+  dJ_dw1=delta2*xValue
+  
+  #Update the weights
+  w2Value =w2Value-r*dJ_dw2
+  w1Value =w1Value-r*dJ_dw1
+  
+  #Return the update values of the weights as a list
+  returnedList=list(w1Value,w2Value)
+  returnedList<-setNames(returnedList, c("w1","w2"))
+  return(returnedList)
+}
+
+x=0.2
+w1=0.3
+w2=0.4
+y=0.5
+weights=c(w1,w2)
+print("weights original")
+
+weights
+
+weightsList=updateWeights(.5,weights[1],weights[2], .6,.2)
+weights=c(weightsList[[1]],weightsList[[2]])
+print("weights updated")
+
+weights
+
+wine <- winemag_data_130k_v2
+
+View(wine)
+
+wine <- wine[wine["variety"]=="Chardonnay",]
+wine <- wine[wine["country"]=="Australia"| wine["country"]=="New Zealand",]
+
+wine <- wine[,c('points','price')]
+
+nrow(wine)
+
+wine <- wine[complete.cases(wine),]
+
+
+smp_size <- floor(0.75 * nrow(wine))
+set.seed(123)
+train_ind <- sample(seq_len(nrow(wine)),size = smp_size)
+
+train <- wine[train_ind, ]
+test <- wine[-train_ind, ]
+
+normal.5 <- function(x){
+  xNew <- ((x- min(x))/(max(x)-min(x)))-0.5
+  return(xNew)
+}
+
+points=train$points
+points=normal.5(points)
+
+price=train$price
+price=normal.5(price)
+
+predNNSingleValue<-function(inputX=points, outputY=price, xValue=.90, learnR=1){
+  #Sample call: predNNSingle(inputX=points,outputY=price,xValue=.90,learnR=1)
+  count=0
+  weights= runif(2,-1,1)
+  for (input in inputX){
+    count = count + 1
+    currentPrice=outputY[count]
+    weightsList=updateWeights(input,weights[1],weights[2],currentPrice, learnR)
+    weights=c(weightsList[[1]],weightsList[[2]])
+  }
+  
+  z2=xValue*weights[1]
+  a2=sigmoid(z2)
+  z3=a2*weights[2]
+  yhat=sigmoid(z3)
+  #Generate some textual output.
+  print(paste0("number of rows: ",count))
+  print(paste0("Given the input: ", xValue))
+  print("the predicted output would be")
+  return(yhat)
+}
+
+predNNSingleValue(inputX=points,outputY=price,xValue=.2, learnR=1)
+
+inputLayerSize=2
+hiddenLayerSize=3
+outputLayerSize=1  
+
+x1=0.2
+x2=0.15
+X=c(x1,x2)                            
+
+X=matrix(X,1, inputLayerSize)
+
+set.seed(3)
+
+W1=matrix(runif(inputLayerSize*hiddenLayerSize,-1,1),inputLayerSize,hiddenLayerSize)
+
+Z2=X%*%W1
+
+Z2
+
+Z2[1]==X[1,1]*W1[1,1]+X[1,2]*W1[2,1]
+
+A2=sigmoid(Z2)
+
+sigmoidPrime<-function(z){
+  return(exp(-z)/(1+exp(-z))^2)
+}
+
+
+updateWeights<-function(XValue=X,W1Value=W1,W2Value=W2,yValue=y,r=2){
+  #Sample call:
+  #weightsList=updateWeights(X,W1,W2,3,4) #The parameters are specified.
+  sigmoid <- function(z) {
+    return(1/(1+exp(-z)))
+  }
+  sigmoidPrime<-function(z){
+    return(exp(-z)/(1+exp(-z))^2)
+  }
+  Z2=XValue%*%W1Value
+  A2=sigmoid(Z2)
+  z3=A2%*%W2Value
+  z3=as.vector(z3)
+  yhat=sigmoid(z3)
+  J=0.5*(yValue-yhat)^2
+  print("the current cost is")
+  print(J)
+  
+  delta3=(yValue-yhat)*(-sigmoidPrime(z3))
+  dJ_dW2=delta3*t(A2)
+  delta2 = (delta3* t(W2Value)) * sigmoidPrime(Z2)
+  dJ_dW1= t(XValue) %*%delta2
+  
+  W2=W2Value-r*dJ_dW2
+  W1=W1Value-r*dJ_dW1
+  
+  Z2=XValue%*%W1
+  A2=sigmoid(Z2)
+  
+  Z3=A2%*%W2 #We use uppercase “Z” because this is a (1 × 1) matrix.
+  z3=as.vector(Z3)
+  yhat=sigmoid(z3)
+  
+  print(paste0("target value y : ",yValue))
+  print(paste0("predicted value: ",yhat))
+  
+  returnedList=list(W1,W2)
+  returnedList<-setNames(returnedList, c("W1","W2"))
+  
+  return(returnedList)
+  
+}
+
+weightsList=updateWeights()
+
+normal.5 <- function(x){
+  xNew <- ((x-min(x))/(max(x)-min(x)))-.5
+  return(xNew)
+}
+
+install.packages("plotly")
+install.packages("reshape2")
+library(plotly)
+library(reshape2)
+
+mooddf <- read.csv("25.csv")
+mooddf<-mooddf[complete.cases(mooddf),]
+my_df=mooddf
+hours_of_sleep=my_df$hours_of_sleep
+calories_burned=my_df$calories_burned
+mood=my_df$mood
+hours_of_sleep=normal.5(hours_of_sleep)
+calories_burned=normal.5(calories_burned)
+bool_of_active=my_df$bool_of_active
+active_factor=factor(bool_of_active,labels = c("inactive", "active"))
+my_df=as.data.frame(cbind(hours_of_sleep,calories_burned,mood, active_factor))
+View(my_df)
+mooddf_plot <- plot_ly(my_df,
+                       x = hours_of_sleep,
+                       y = calories_burned,
+                       z = mood,
+                       type = "scatter3d",
+                       mode = "markers")
+mood_lm <- lm(mood ~ hours_of_sleep + calories_burned,
+              data = my_df)
+graph_reso <- 0.05
+axis_x <- seq(min(my_df$hours_of_sleep), max(my_df$hours_of_sleep),
+              by = graph_reso)
+axis_y <- seq(min(my_df$calories_burned), max(my_df$calories_burned),
+              by = graph_reso)
+mood_lm_surface <- expand.grid(hours_of_sleep = axis_x,calories_burned =
+                                 axis_y,KEEP.OUT.ATTRS = F)
+
+mood_lm_surface$mood <- predict.lm(mood_lm, newdata = mood_lm_surface)
+
+mood_lm_surface <- acast(mood_lm_surface, hours_of_sleep ~ calories_burned, value.var = "mood")
+
+hcolors=c("blue","orange")[active_factor]
+mood_plot <- plot_ly(my_df, x = ~hours_of_sleep, y = ~calories_burned, z = ~mood, text = "active/inactive", type = "scatter3d",mode = "markers",marker = list(color = hcolors))
+mood_plot <- add_trace(p = mood_plot,z = mood_lm_surface,x = axis_x,y = axis_y,type = "surface")                     
+mood_plot
+mood_lm
+
+summary(mood_lm)
+
+inputLayerSize=2
+hiddenLayerSize=3
+outputLayerSize=1
+
+set.seed(3)
+
+W1=matrix(runif(inputLayerSize*hiddenLayerSize,-1,1),inputLayerSize,hiddenLayerSize)
+W2=matrix(runif(hiddenLayerSize*outputLayerSize,-1,1),hiddenLayerSize,outputLayerSize)
+normal.5 <- function(x){
+  xNew <- ((x-min(x))/(max(x)-min(x)))-.5
+  return(xNew)
+}
+
+mood <- read.csv("25.csv")
+mood<-mood[complete.cases(mood),]
+colnames(mood)
+mood=mood[,c("mood","calories_burned","hours_of_sleep")]
+#Split data into “train” and “test” sets.
+
+smp_size <- floor(0.75 * nrow(mood))
+set.seed(123)
+
+train_ind <- sample(seq_len(nrow(mood)), size = smp_size)
+
+train <- mood[train_ind, ]
+test <- mood[-train_ind, ]
+
+colnames(mood)
+
+moodInputs=train[,c("calories_burned","hours_of_sleep")]
+moodInputs=normal.5(moodInputs)
+moodOutput=train[,"mood"]
+moodOutput=normal.5(moodOutput)
+countS=0
+
+View(moodOutput)
+View(moodInputs)
+
+
+
+fullUpdateWeights<-function(inputX=moodInputs,outputY=moodOutput, W1Val= W1,W2Val=W2){
+  #sample call:
+  #fullUpdateWeights(inputX=moodInputs,outputY=moodOutput,W1,W2)
+  weights=list(W1Val,W2Val)
+  sigmoid <- function(z) {
+    return(1/(1+exp(-z)))
+  }
+  sigmoidPrime<-function(z){
+    return(exp(-z)/(1+exp(-z))^2)
+  }
+  
+  for (predictor in rownames(inputX)){
+    predictorMat=unlist(inputX[predictor,])
+    predictorMat=matrix(predictorMat,1,2)
+    countS=countS+1
+    outputY= unlist(outputY)
+    currentMoodOutput=outputY[countS]
+    
+    weightsList=updateWeights(predictorMat,weights[[1]],weights[[2]], yValue=currentMoodOutput,.2)
+    
+    weights=list(weightsList[[1]],weightsList[[2]])
+    
+    if(countS==nrow(inputX)){#this will be used in the next section called Repeated Training: Epochs.
+      countS0 = 0
+    }
+    
+  }
+  #We have iterated through the entire data set and with each iteration we updated the weights. Next we measure the cost.
+  
+  print(weights)
+  inputsMat=as.matrix(moodInputs)
+  y=as.matrix(moodOutput,ncol=1)
+  Z2=rowSums(inputsMat%*%weights[[1]])
+  A2=sigmoid(Z2)
+  Z3=rowSums(A2%*%t(weights[[2]]))
+  yHat=sigmoid(Z3)
+  #We want to sum up all the
+  J=(1/nrow(inputsMat))*(0.5*sum((y-yHat)^2))
+  print("the cost, J, for this epoch is")
+  print(J)
+  returnedList<-setNames(weights, c("W1","W2"))
+  return(returnedList)
+  # end of fullUpdareWeights
+}
+
+fullUpdateWeights(inputX=moodInputs,outputY=moodOutput,W1,W2)
+
+JCost<-function(moodInputsVal=moodInputs,moodOutputVal=moodOutput, W1Val=W1,W2Val=W2) {
+  inputsMat=as.matrix(moodInputsVal)
+  y=as.matrix(moodOutputVal,ncol=1)
+  Z2=rowSums(inputsMat%*%W1Val)
+  A2=sigmoid(Z2)
+  Z3=rowSums(A2%*%t(W2Val))
+  yHat=sigmoid(Z3)
+  J=(1/nrow(inputsMat))*(0.5*sum((y-yHat)^2))
+  print("the cost, J, for this epoch is")
+  print(J)
+}
+
+#First find the error on training set.
+
+fullUpdateWeights(inputX=moodInputs,outputY=moodOutput,W1,W2)
+
+weightsList=fullUpdateWeights(inputX=moodInputs,outputY=moodOutput, W1,W2)
+
+ 
+
+W1=weightsList[["W1"]]
+W2=weightsList[["W2"]]
+weightsList=fullUpdateWeights(inputX=moodInputs,outputY=moodOutput,W1,W2)                                           
+
+moodInputs=test[,c("calories_burned","hours_of_sleep")]
+moodInputs=normal.5(moodInputs)
+
+moodOutput=test[,"mood"]
+moodOutput=unlist(moodOutput)
+moodOutput=normal.5(moodOutput)
+countS=0
+
+JCost(moodInputs,moodOutput,W1,W2)
+
+#Repeated training
+
+globalJ <<- J
+J=0.5*(yValue-yhat)^2
+
+predNNEpoch <- function(inputX=moodInputs,outputY=moodOutputs,W1Value,W2Value,epochs=n){
+  #Sample call:
+  #predNNEpoch(inputX=moodinputs,outputY=moodOutput,W1Value=W1,W2Value=W2, epochs=5,rValue=.1)
+  
+  for(k in 1:epochs){
+    weightsList <<- fullUpdateWeights(inputX,outputY,W1Value,W2Value)
+    W1Value <- weightsList[["W1"]]
+    W2Value <- weightsList[["W2"]]
+    print(paste0("Epoch number: ", k, " globalJ: ", globalJ))
+  }
+}
+W1=matrix(runif(inputLayerSize*hiddenLayerSize,-1,1),inputLayerSize,hiddenLayerSize)
+          
+W2=matrix(runif(hiddenLayerSize*outputLayerSize,-1,1),hiddenLayerSize, outputLayerSize)
+
+predNNEpoch(inputX=moodInputs,outputY=moodOutput,W1Value=W1,W2Value=W2,epochs=5)
+                      
+                                      
+
+                        

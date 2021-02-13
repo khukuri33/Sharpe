@@ -1,0 +1,79 @@
+exp(-3:3)
+conditional_prob_bool <- function(varPrior, varPriorLevel, varCondition, varConditionLevel, df){
+  #Sample call:
+  ##conditional_prob_bool('Class', 'democrat', 'V1', 'y', HouseVotes84)
+  df$names<-rownames(df)
+  prior_bool <- df[,varPrior] == varPriorLevel
+  prior_event <- df[prior_bool,]
+  condition_bool <- df[,varCondition] == varConditionLevel
+  condition_event=df[condition_bool,]
+  return(probAdj(intersect_event(prior_event,condition_event,df),df)/probAdj(condition_event,df))
+  df=subset(df, select=-c(names))
+}
+library(mlbench)
+library(mice)
+library(vcd)
+data("Arthritis")
+colnames(Arthritis)
+
+
+intersect_event=function(a,b,df=df){
+  return(df[intersect(a$names,b$names),])}
+union_event=function(E,F){
+  if(!is.data.frame(E)|!is.data.frame(F)){
+    stop("arguments must be a dataframe")
+  }
+  return(unique(rbind(E,F)))}
+multi_union_event=function(E,F,...){return(unique(rbind(E,F,...)))}
+complement=function(a,df){
+  df[!a,]
+}
+prob<-function( e, s) {
+  return(nrow(e)/nrow(s))}
+probAdj<-function( e, s) {
+  if (nrow(e)==0){
+    return(nrow(e)+1/nrow(s))
+  } else {
+    return(nrow(e)/nrow(s))}
+}
+
+percentSplit=0.7
+dfparam=Arthritis
+smp_size <- floor(percentSplit * nrow(dfparam))
+train_ind <- sample(seq_len(nrow(dfparam)), size = smp_size)
+train <- dfparam[train_ind, ]
+test <- dfparam[-train_ind, ]
+intersect_event<-function(a, b, df){
+  return(df[intersect(a$names, b$names),])
+}
+
+
+a3Dimnames <- list(c("a","b"),c("x","y", "z"), c("u","t"))
+
+a3 <- array(1:12, dim=c(2, 3, 2), dimnames=a3Dimnames)
+a3
+
+dfparam=train
+dim1 <- vector()
+dimnames1 <- list()
+class <- c("Treatment")
+colname <- colnames(dfparam)
+
+colname <- colname[is.element(colname, c(class,"names","ID","Age"))]
+
+for (i in 1:length(colname)) { #Loop through all the input variables and create a matrix of conditional probabilities for each.
+  dim1 <- vector()
+  dimnames1 <- list()
+  dim1 <- length(levels(as.factor(dfparam[, class]))) #at this point, dim1 is a vector with a single element which is the number of levels of the class variable.
+  dim1 <- append(dim1, length(levels(as.factor(dfparam[, colname[i]]))))
+
+  dimnames1[length(dimnames1) + 1] <- list(c(levels(as.factor(dfparam[, class]))))
+  dimnames1[length(dimnames1) + 1] <-list(c(levels(as.factor(dfparam[, colname[i]]))))
+  classnames <- c(levels(as.factor(dfparam[, class])))
+  varnames <- c(levels(as.factor(dfparam[, colname[i]])))
+}
+
+x <- array(0, dim = c(dim1), dimnames = dimnames1)
+x
+
+dfparam

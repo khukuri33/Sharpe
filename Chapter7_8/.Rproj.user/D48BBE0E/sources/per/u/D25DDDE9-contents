@@ -1,0 +1,156 @@
+library(mlbench)
+library(mice)
+data("HouseVotes84")
+imputeddf=mice(HouseVotes84,m=1,maxit=50,meth='pmm',seed=500)
+completedData <- complete(imputeddf,1)
+dfHouse=completedData
+df$names<-rownames(df)
+intersect_event=function(a,b,df=df){
+  return(df[intersect(a$names,b$names),])}
+
+union_event=function(E,F){
+  if(!is.data.frame(E)|!is.data.frame(F)){
+    stop("arguments must be a dataframe")
+  }
+  return(unique(rbind(E,F)))}
+
+multi_union_event=function(E,F,...){return(unique(rbind(E,F,...)))}
+complement=function(a,df){
+  df[!a,]
+}
+
+probBxconditional_prob= function(a,b,s){
+  return(prob(intersect_event(a,b,s),s))}
+
+prob<-function( e, s) {
+  return(nrow(e)/nrow(s))}
+
+bool2event<-function(E_bool,df){return(df[E_bool,])}
+
+conditional_prob=function(a,b,s){
+  return(prob(intersect_event(a,b,s),s)/prob(b,s))
+}
+
+conditional_prob_bool <- function(varPrior, varPriorLevel, varCondition, varConditionLevel, df){
+  prior_bool <- df[,varPrior] == varPriorLevel
+  prior_event <- df[prior_bool,]
+  
+  condition_bool <- df[,varCondition] == varConditionLevel
+  condition_event=df[condition_bool,]
+  
+  return(prob(intersect_event(prior_event,condition_event,df),df)/prob(condition_event,df))
+}
+
+conditional_prob_bool('Class', 'democrat', 'V1', 'y', dfHouse)
+install.packages("vcd")  
+library(vcd)  
+data("Arthritis")
+data("HouseVotes84")  
+
+imputeddf=mice(Arthritis,m=1,maxit=50,meth='pmm',seed=500)  
+completedData <- complete(imputeddf,1)  
+dfArthritis=completedData  
+df$names<-rownames(df)
+
+NaiveBayes_singleClassEllipsis=function(className="Class",classValue="democrat",dfparam=df, ...){
+  dfparam=as.data.frame(dfparam)
+  dfparam$names<-rownames(dfparam)
+  
+  args<-list(...)
+  count <- length(args)
+  
+  class_bool=dfparam[,className]==classValue
+  
+  classE=dfparam[class_bool,]
+  numerator=prob(classE,dfparam)
+  for(i in 1:count){
+  
+    numerator=numerator*conditional_prob_bool(names(args)[i],args[[i]],className,classValue,dfparam)
+    
+  }
+  denominator=0
+  classLevels=levels(dfparam[,className])
+  countOfClassLevels=length(classLevels)
+  
+  for(j in 1:countOfClassLevels){
+    class_bool=dfparam[,className]==classLevels[j]
+    classE=dfparam[class_bool,]
+    
+    denominatorFactor=prob(classE,dfparam)
+    for(i in 1:count){
+      
+      denominatorFactor=denominatorFactor*conditional_prob_bool(className, classLevels[j],names(args)[i],args[[i]],dfparam)
+    }
+    
+    denominator=denominator+denominatorFactor
+    
+  }
+  
+  return(numerator/denominator)
+}
+NaiveBayes_singleClassEllipsis("Treatment","Treated",Arthritis, Sex='Male',Improved='Marked')
+
+  
+NaiveBayes_singleClassEllipsistry=function(className="Class",classValue="democrat",dfparam=df, ...){
+  dfparam=as.data.frame(dfparam)
+  dfparam$names<-rownames(dfparam)
+  
+  args<-list(...)
+  count <- length(args)
+  
+  class_bool=dfparam[,className]==classValue
+  
+  classE=dfparam[class_bool,]
+  numerator=prob(classE,dfparam)
+  for(i in 1:c ount){
+ 
+    numerator=numerator*conditional_prob_bool(names(args)[i],args[[i]],className,classValue,dfparam)
+    
+  }
+  denominator=0
+  classLevels=levels(dfparam[,className])
+  countOfClassLevels=length(classLevels)
+  
+  for(j in 1:countOfClassLevels){
+    class_bool=dfparam[,className]==classLevels[j]
+    classE=dfparam[class_bool,]
+    
+    denominatorFactor=prob(classE,dfparam)
+    for(i in 1:count){
+      
+      denominatorFactor=denominatorFactor*conditional_prob_bool(className, classLevels[j],names(args)[i],args[[i]],dfparam)
+    }
+    
+    denominator=denominator+denominatorFactor
+    
+  }
+  
+  return(numerator/denominator)
+}  
+
+predNaiveBayes=function(class="Class",dfparam=df, ...){
+  forecast=list()
+  argsPred=list(...)
+  lev=levels(dfparam[,class])
+  classprob=0
+  predictedclass=lev[1]
+  
+  for(i in lev){
+    p=NaiveBayes_singleClassEllipsis(class,i,dfparam,...)
+    if(classprob<p){
+      classprob=p
+      predictedclass=i
+      forecast[["Instance"]]=argsPred
+      forecast[["predicted class"]]=predictedclass
+      forecast[["probability of predicted class (if independence assumption is true)"]]=classprob
+    }
+  }
+  return(forecast)
+}
+
+  
+  
+  
+  
+  
+  

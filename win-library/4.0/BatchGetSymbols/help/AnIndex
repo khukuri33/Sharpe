@@ -1,0 +1,10 @@
+BatchGetSymbols	BatchGetSymbols
+calc.ret	calc.ret
+df.fill.na	df.fill.na
+fix.ticker.name	fix.ticker.name
+get.clean.data	get.clean.data
+GetFTSE100Stocks	GetFTSE100Stocks
+GetIbovStocks	GetIbovStocks
+GetSP500Stocks	GetSP500Stocks
+myGetSymbols	myGetSymbols
+reshape.wide	reshape.wide

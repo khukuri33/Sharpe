@@ -1,0 +1,136 @@
+library(mlbench)
+library(mice)
+data("HouseVotes84")
+imputeddf=mice(HouseVotes84,m=1,maxit=50,meth='pmm',seed=500)
+completedData <- complete(imputeddf,1)
+df=completedData
+df$names<-rownames(df)
+
+
+
+intersect_event=function(a,b,df=df){
+  return(df[intersect(a$names,b$names),])}
+  
+
+union_event=function(E,F){
+  if(!is.data.frame(E)|!is.data.frame(F)){
+    stop("arguments must be a dataframe")
+  }
+  return(unique(rbind(E,F)))}
+
+
+multi_union_event=function(E,F,...){return(unique(rbind(E,F,...)))}
+complement=function(a,df){
+  df[!a,]
+}
+
+probBxconditional_prob= function(a,b,s){
+  return(prob(intersect_event(a,b,s),s))}
+
+
+
+prob<-function( e, s) {
+  return(nrow(e)/nrow(s))}
+
+conditional_prob=function(a,b,s){
+  return(prob(intersect_event(a,b,s),s)/prob(b,s))
+}
+
+
+
+conditional_prob_bool <- function(varPrior, varPriorLevel, varCondition, varConditionLevel, df){
+  prior_bool <- df[,varPrior] == varPriorLevel
+  prior_event <- df[prior_bool,]
+  
+  condition_bool <- df[,varCondition] == varConditionLevel
+  condition_event=df[condition_bool,]
+  
+  return(prob(intersect_event(prior_event,condition_event,df),df)/prob(condition_event,df))
+}
+
+conditional_prob_bool('Class', 'democrat', 'V1', 'y', df)
+
+
+prob_per_class_NaiveBayes=function(class, v1='y',v2='y',v3='y',df){
+  df=as.data.frame(df)
+  df$names<-rownames(df)
+  
+  A_bool=df$V1==v1 & df$V2==v2& df$V3==v3
+  A=df[A_bool,]
+  
+  class_bool=df$Class==class
+  classE=df[class_bool,]
+  
+  
+  numerator=prob(classE,df)*conditional_prob_bool('V1', v1,'Class',class,df)*conditional_prob_bool('V2', v2,'Class',class,df)*conditional_prob_bool('V3', v3,'Class',class,df)
+  print(numerator)
+  numerator=prob(classE,df)*conditional_prob_bool('V1', v1,'Class',class,df)*conditional_prob_bool('V2', v2,'Class',class,df)*conditional_prob_bool('V3', v3,'Class',class,df)
+  lev=levels(df$Class)
+  denominator=0
+  for(i in lev){
+    class_bool=df$Class==i
+    classE=df[class_bool,]
+    class=i
+    denominator= denominator+(prob(classE,df)*conditional_prob_bool('V1', v1,'Class',class,df)* conditional_prob_bool('V2', v2,'Class',class,df)* conditional_prob_bool('V3', v3,'Class',class,df))
+  }
+  return(numerator/denominator)
+ 
+}
+
+prob_per_class_NaiveBayes("democrat", v1='y',v2='y',v3='y',df)
+prob_per_class_NaiveBayestry("democrat", v1='y',v2='y',v3='y',df)  
+
+prob_per_class_NaiveBayestry=function(class, v1='y',v2='y',v3='y',df){
+  df=as.data.frame(df)
+  df$names<-rownames(df)
+  
+  A_bool=df$V1==v1 & df$V2==v2& df$V3==v3
+  A=df[A_bool,]
+  
+  class_bool=df$Class==class
+  classE=df[class_bool,]
+  
+ 
+  condition_bool_V1 <- df[,"V1"] == v1
+  condition_event_V1=df[condition_bool_V1,]
+  
+  condition_bool_V2 <- df[,"V2"] == v2
+  condition_event_V2=df[condition_bool_V2,]
+  
+  condition_bool_V3 <- df[,"V3"] == v3
+  condition_event_V3=df[condition_bool_V3,]
+  
+  numerator=prob(classE,df)*conditional_prob(condition_event_V1,classE,df)*conditional_prob(condition_event_V2,classE,df)*conditional_prob(condition_event_V3,classE,df)
+  print(numerator)
+  
+  lev=levels(df$Class)
+  denominator=0
+  for(i in lev){
+    class_bool=df$Class==i
+    classE=df[class_bool,]
+    class=i
+    denominator= denominator+(prob(classE,df)*conditional_prob_bool('V1', v1,'Class',class,df)* conditional_prob_bool('V2', v2,'Class',class,df)* conditional_prob_bool('V3', v3,'Class',class,df))
+  }
+  return(numerator/denominator)
+  
+} 
+predNaiveBayes("Class", "y", "y", "y", df)
+
+predNaiveBayes <- function(class, v1='y',v2='y',v3='y',df){
+  forcast <- list()
+  lev <- levels(df[,class])
+  classprob <- 0
+  predicted_class <- lev[1]
+  for (i in lev){
+    p = prob_per_class_NaiveBayes(i, v1,v2,v3,df)
+    if (classprob<p){
+      classprob = p
+      predicted_class = i
+     
+    }
+    forcast[["predicted class"]]=predicted_class
+    forcast[["probability"]]=classprob
+    return(forcast)
+  }
+}  
+

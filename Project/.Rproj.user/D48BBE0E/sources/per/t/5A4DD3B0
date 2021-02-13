@@ -1,0 +1,32 @@
+{
+    "id": "5A4DD3B0",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1607680861272.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "expression": "portfolio_return",
+        "caption": "portfolio_return",
+        "totalObservations": "238",
+        "displayedObservations": "238",
+        "variables": "1",
+        "cacheKey": "973BA092",
+        "object": "portfolio_return",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=portfolio_return&cache_key=973BA092&max_cols=50",
+        "preview": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 2695051466144,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1607680861272,
+    "read_only": false,
+    "read_only_alternatives": []
+}

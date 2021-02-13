@@ -1,0 +1,32 @@
+{
+    "id": "7DBCF981",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1607679627345.0,
+    "source_on_save": false,
+    "relative_order": 9,
+    "properties": {
+        "expression": "portfolio_prices",
+        "caption": "portfolio_prices",
+        "totalObservations": "239",
+        "displayedObservations": "239",
+        "variables": "3",
+        "cacheKey": "70556ED7",
+        "object": "portfolio_prices",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=portfolio_prices&cache_key=70556ED7&max_cols=50",
+        "preview": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 2318265787206560114,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1607679627345,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,40 @@
+library(mlbench)
+data("HouseVotes84")
+table(HouseVotes84[,1])
+table(HouseVotes84[,1:2])
+table(HouseVotes84[,1:2])/sum(table(HouseVotes84[,1:2]))
+table(HouseVotes84[,1],HouseVotes84[,1])
+data(mtcars)
+colnames(mtcars)
+View(head(mtcars))
+table(mtcars[,1])
+table(mtcars[,2])
+str(HouseVotes84)
+NaiveRule<-function(output="Class" ,df=df){
+  if (is.data.frame(df)){
+  classTable=table(df$Class)
+  return(names(classTable[which.max(classTable)]))
+  }
+  else {stop()}
+}
+
+Naivetry <- function(output = "Class", df){
+  d <- 0 
+  r <- 0
+  for (i in df$Class){
+    
+    if (i == "democrat") {
+      d <- d + 1
+    } else { r <- r + 1}
+  }
+  if (d > r){
+    print("democrat")
+  }else {print("republican")}
+}
+start_time <- Sys.time()
+NaiveRule(Class, df)
+end_time <- Sys.time()
+end_time - start_time
+
+
+                

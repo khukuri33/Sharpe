@@ -1,0 +1,17 @@
+BatchGetSymbols         Function to download financial data
+GetFTSE100Stocks        Function to download the current components of
+                        the FTSE100 index from Wikipedia
+GetIbovStocks           Function to download the current components of
+                        the Ibovespa index from Bovespa website
+GetSP500Stocks          Function to download the current components of
+                        the SP500 index from Wikipedia
+calc.ret                Function to calculate returns from a price and
+                        ticker vector
+df.fill.na              Replaces NA values in dataframe for closest
+                        price
+fix.ticker.name         Fix name of ticker
+get.clean.data          Get clean data from yahoo/google
+myGetSymbols            An improved version of function 'getSymbols'
+                        from quantmod
+reshape.wide            Transforms a dataframe in the long format to a
+                        list of dataframes in the wide format

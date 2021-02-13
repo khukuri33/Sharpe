@@ -1,0 +1,32 @@
+{
+    "id": "B40034AA",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1608027121032.0,
+    "source_on_save": false,
+    "relative_order": 7,
+    "properties": {
+        "expression": "R_Eturn",
+        "caption": "R_Eturn",
+        "totalObservations": "1",
+        "displayedObservations": "1",
+        "variables": "499",
+        "cacheKey": "542F909E",
+        "object": "R_Eturn",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=R_Eturn&cache_key=542F909E&max_cols=50",
+        "preview": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 2486177869400,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1608027121032,
+    "read_only": false,
+    "read_only_alternatives": []
+}
